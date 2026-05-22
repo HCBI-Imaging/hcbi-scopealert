@@ -60,14 +60,6 @@ main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 .badge-maintenance { background: #fff8e1; color: #f57f17; }
 .badge-offline { background: #f5f5f5; color: #757575; }
 
-/* Report link */
-.report-bar { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem 1.5rem; margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-.report-bar-text { font-size: 14px; }
-.report-bar-text strong { display: block; margin-bottom: 3px; }
-.report-bar-text span { font-size: 13px; color: #888; }
-.report-link { display: inline-block; background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; }
-.report-link:hover { background: #333; }
-
 /* States */
 .loading { text-align: center; padding: 4rem; color: #888; font-size: 14px; }
 .error-box { background: #fdecea; color: #c62828; border-radius: 12px; padding: 1.25rem; font-size: 13px; line-height: 1.6; margin-bottom: 1rem; }
@@ -115,13 +107,7 @@ footer a { color: #aaa; }
       <div class="legend-item"><span class="dot dot-offline"></span> Offline</div>
     </div>
     <div id="loc-list"></div>
-    <div class="report-bar">
-      <div class="report-bar-text">
-        <strong>Found a problem?</strong>
-        <span>Submit an issue report with a description and optional photo.</span>
-      </div>
-      <a class="report-link" href="https://hbrown227.github.io/lab-instruments">Report an issue →</a>
-    </div>
+
   </div>
   <div id="error-state" style="display:none">
     <div class="error-box">⚠️ Could not load instrument status. Please try refreshing.</div>
