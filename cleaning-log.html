@@ -54,7 +54,6 @@ textarea { resize: vertical; min-height: 80px; }
 .check-box::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; opacity: 0; transition: opacity .1s; }
 .check-item.checked .check-box::after { opacity: 1; }
 .check-label { font-size: 13px; font-weight: 500; }
-.check-all-btn { font-size: 12px; color: var(--accent); background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; padding: 0; margin-bottom: 6px; }
 .checklist-placeholder { font-size: 13px; color: var(--text-muted); padding: 10px 0; }
 
 /* BUTTONS */
@@ -154,7 +153,6 @@ textarea { resize: vertical; min-height: 80px; }
       <div class="form-group" id="checklist-section">
         <label>Cleaning Checklist</label>
         <div id="checklist-hint" class="checklist-placeholder">Select a microscope to load its checklist.</div>
-  
         <div class="checklist" id="log-checklist"></div>
       </div>
       <div class="divider"></div>
@@ -230,7 +228,7 @@ const SUPABASE_KEY  = 'sb_publishable_Nc6iRHdZjvhd3YkxI2IRRQ_zuUQuwWH';
 const ADMIN_PIN     = '2010';
 
 let adminUnlocked = false;
-let scopes        = [];   // [{ id, name, room, checkItems: [] }]
+let scopes        = [];
 let logs          = [];
 
 // ── SUPABASE ────────────────────────────────────────────
@@ -304,14 +302,12 @@ function onScopeChange() {
 }
 
 function loadChecklistForScope(scopeId) {
-  const hint     = document.getElementById('checklist-hint');
-  const clEl     = document.getElementById('log-checklist');
-  const allBtn   = document.getElementById('check-all-btn');
+  const hint = document.getElementById('checklist-hint');
+  const clEl = document.getElementById('log-checklist');
 
   if (!scopeId) {
     hint.textContent = 'Select a microscope to load its checklist.';
     hint.style.display = 'block';
-    allBtn.style.display = 'none';
     clEl.innerHTML = '';
     return;
   }
@@ -320,13 +316,11 @@ function loadChecklistForScope(scopeId) {
   if (!scope || !scope.checkItems.length) {
     hint.textContent = 'No checklist items for this microscope yet — add them in Admin.';
     hint.style.display = 'block';
-    allBtn.style.display = 'none';
     clEl.innerHTML = '';
     return;
   }
 
   hint.style.display = 'none';
-  allBtn.style.display = 'block';
   clEl.innerHTML = scope.checkItems.map(item => `
     <label class="check-item" id="ci-${item.id}" onclick="toggleCheck('${item.id}')">
       <input type="checkbox" id="chk-${item.id}">
@@ -341,17 +335,6 @@ function toggleCheck(id) {
   const chk = document.getElementById(`chk-${id}`);
   chk.checked = !chk.checked;
   el.classList.toggle('checked', chk.checked);
-}
-
-function checkAll() {
-  const scopeId = document.getElementById('log-scope').value;
-  const scope   = scopes.find(s => s.id === scopeId);
-  if (!scope) return;
-  scope.checkItems.forEach(item => {
-    const el  = document.getElementById(`ci-${item.id}`);
-    const chk = document.getElementById(`chk-${item.id}`);
-    if (el && chk) { chk.checked = true; el.classList.add('checked'); }
-  });
 }
 
 // ── SUBMIT ───────────────────────────────────────────────
@@ -404,7 +387,6 @@ function renderHistory() {
   const filterScope  = document.getElementById('filter-scope').value;
   const filterPeriod = document.getElementById('filter-period').value;
 
-  // Rebuild scope filter dropdown
   const sel = document.getElementById('filter-scope');
   const cur = sel.value;
   sel.innerHTML = '<option value="all">All microscopes</option>';
@@ -423,7 +405,6 @@ function renderHistory() {
     list = list.filter(l => new Date(l.cleaned_at) >= cutoff);
   }
 
-  // Metrics
   const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
   document.getElementById('m-total').textContent  = logs.length;
   document.getElementById('m-week').textContent   = logs.filter(l => new Date(l.cleaned_at) >= weekAgo).length;
