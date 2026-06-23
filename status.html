@@ -66,26 +66,46 @@ main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 
 /* Section heading */
 .section-heading { font-size: 14px; font-weight: 600; color: #444; margin-bottom: 1rem; margin-top: 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.section-heading:first-child { margin-top: 0; }
 
-/* Reports */
-.report-list { display: flex; flex-direction: column; gap: 10px; }
-.report-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 12px 16px; }
+/* Report list */
+.report-list { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; }
+.report-row { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; transition: background .1s; user-select: none; }
+.report-row:last-child { border-bottom: none; }
+.report-row:hover { background: #fafafa; }
+.report-row:active { background: #f0f0f0; }
+.report-row-info { flex: 1; min-width: 0; }
+.report-row-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.report-row-sub { font-size: 11px; color: #888; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.report-chevron { color: #ccc; font-size: 18px; line-height: 1; flex-shrink: 0; }
 .loc-pill { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 20px; background: #f0f0f0; color: #666; }
 .sev-high { color: #c62828; font-weight: 500; }
 .sev-medium { color: #f57f17; font-weight: 500; }
 .sev-low { color: #888; }
-.report-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 8px; margin-top: 8px; cursor: pointer; }
 .eta-display { font-size: 11px; color: #888; }
 
-/* Report filter */
-.filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+/* Filter row */
 .filter-row select { font-size: 13px; padding: 5px 10px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fff; color: #555; outline: none; cursor: pointer; }
 
 /* Lightbox */
-.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 300; display: none; align-items: center; justify-content: center; cursor: pointer; }
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 400; display: none; align-items: center; justify-content: center; cursor: pointer; }
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 95vw; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+
+/* Drawer */
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .25s; }
+.drawer-overlay.open { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-radius: 18px 18px 0 0; z-index: 201; max-height: 85vh; overflow-y: auto; padding: 0 0 env(safe-area-inset-bottom, 1rem); transform: translateY(100%); transition: transform .28s cubic-bezier(.32,.72,0,1); }
+.drawer.open { transform: translateY(0); }
+.drawer-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 12px auto 0; }
+.drawer-header { padding: 16px 1.25rem 14px; border-bottom: 1px solid #f0f0f0; }
+.drawer-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.drawer-meta { font-size: 12px; color: #888; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; row-gap: 6px; }
+.drawer-body { padding: 1.1rem 1.25rem 1.5rem; }
+.drawer-section-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.drawer-description { font-size: 14px; color: #333; line-height: 1.65; margin-bottom: 1.5rem; white-space: pre-wrap; }
+.drawer-img { width: 100%; max-height: 320px; object-fit: cover; border-radius: 10px; cursor: zoom-in; }
+.drawer-close { position: absolute; top: 14px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #f0f0f0; border: none; font-size: 16px; line-height: 28px; text-align: center; cursor: pointer; color: #666; padding: 0; }
+.drawer-close:hover { background: #e5e5e5; }
 
 /* States */
 .loading { text-align: center; padding: 4rem; color: #888; font-size: 14px; }
@@ -118,7 +138,7 @@ footer a { color: #aaa; }
     </div>
     <div class="header-right">
       <span id="refresh-info">Loading…</span>
-      <button class="refresh-btn" onclick="load()">↻ Refresh</button>
+      <button class="refresh-btn" onclick="load()">&#8635; Refresh</button>
     </div>
   </div>
 </header>
@@ -143,28 +163,46 @@ footer a { color: #aaa; }
 
     <div class="section-heading">
       <span>Issue reports</span>
-      <div class="filter-row" style="margin-bottom:0">
-        <select id="filter-status" onchange="renderReports()">
-          <option value="open">Open</option>
-          <option value="all">All</option>
-          <option value="resolved">Resolved</option>
-        </select>
-      </div>
+      <select id="filter-status" onchange="renderReports()">
+        <option value="open">Open</option>
+        <option value="all">All</option>
+        <option value="resolved">Resolved</option>
+      </select>
     </div>
     <div id="report-list" class="report-list"></div>
   </div>
 
   <div id="error-state" style="display:none">
-    <div class="error-box">⚠️ Could not load instrument status. Please try refreshing.</div>
+    <div class="error-box">&#9888;&#65039; Could not load instrument status. Please try refreshing.</div>
   </div>
 </main>
 
+<!-- Lightbox -->
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
   <img id="lightbox-img" src="" alt="Report photo">
 </div>
 
+<!-- Report detail drawer -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="report-drawer" style="position:relative">
+  <div class="drawer-handle"></div>
+  <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
+  <div class="drawer-header">
+    <div class="drawer-title" id="drawer-title"></div>
+    <div class="drawer-meta" id="drawer-meta"></div>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section-label">Description</div>
+    <div class="drawer-description" id="drawer-description"></div>
+    <div id="drawer-img-wrap" style="display:none">
+      <div class="drawer-section-label" style="margin-bottom:8px">Photo</div>
+      <img class="drawer-img" id="drawer-img" src="" alt="Report photo">
+    </div>
+  </div>
+</div>
+
 <footer>
-  Live status · Auto-refreshes every 5 minutes ·
+  Live status &middot; Auto-refreshes every 5 minutes &middot;
   <a href="https://hbrown227.github.io/lab-instruments">Full tracker</a>
 </footer>
 
@@ -185,14 +223,14 @@ async function sb(path) {
 function statusBadge(s) {
   const map = { ok:'badge-ok', issue:'badge-issue', maintenance:'badge-maintenance', offline:'badge-offline' };
   const labels = { ok:'Operational', issue:'Issue reported', maintenance:'Maintenance', offline:'Offline' };
-  return `<span class="badge ${map[s]||'badge-offline'}"><span class="dot dot-${s||'offline'}" style="width:6px;height:6px"></span>${labels[s]||s}</span>`;
+  return `<span class="badge ${map[s]||'badge-offline'}"><span class="dot dot-${s||'offline'}" style="width:6px;height:6px;margin-right:2px"></span>${labels[s]||s}</span>`;
 }
 
 function progressBadge(p) {
   const map = {
     new: ['New', 'badge-new'],
-    in_progress_internal: ['In progress – Internal', 'badge-internal'],
-    in_progress_company: ['In progress – Company', 'badge-company'],
+    in_progress_internal: ['In progress \u2013 Internal', 'badge-internal'],
+    in_progress_company: ['In progress \u2013 Company', 'badge-company'],
     resolved_progress: ['Resolved', 'badge-resolved-prog']
   };
   const [label, cls] = map[p] || ['New', 'badge-new'];
@@ -204,43 +242,85 @@ function openLightbox(url) {
   document.getElementById('lightbox').classList.add('open');
 }
 
-function renderReports() {
-  const filterStatus = document.getElementById('filter-status').value;
-  let list = allReports;
-  if (filterStatus !== 'all') list = list.filter(r => r.status === filterStatus);
+function getFilteredReports() {
+  const f = document.getElementById('filter-status').value;
+  return f === 'all' ? allReports : allReports.filter(r => r.status === f);
+}
 
+function renderReports() {
+  const list = getFilteredReports();
   const el = document.getElementById('report-list');
   if (!list.length) {
     el.innerHTML = '<div class="empty">No reports found</div>';
     return;
   }
 
-  el.innerHTML = list.map(r => {
+  el.innerHTML = list.map((r, idx) => {
     const inst = allInstruments.find(i => i.id === r.instrument_id);
     const loc = inst ? allLocations.find(l => l.id === inst.location_id) : null;
-    const sev = { high:'sev-high', medium:'sev-medium', low:'sev-low' }[r.severity] || '';
-    const date = new Date(r.created_at).toLocaleDateString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    const sevClass = { high:'sev-high', medium:'sev-medium', low:'sev-low' }[r.severity] || '';
+    const date = new Date(r.created_at).toLocaleDateString(undefined, { month:'short', day:'numeric' });
     const prog = r.progress || 'new';
-    const eta = r.eta ? new Date(r.eta).toLocaleDateString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : null;
 
-    return `<div class="report-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-        <div style="min-width:0;flex:1">
-          <div style="font-size:13px;font-weight:600">${inst ? inst.name : 'Unknown instrument'}</div>
-          <div style="font-size:11px;color:#888;margin-top:2px">
-            ${loc ? `<span class="loc-pill">${loc.name}</span> ` : ''}${date}${r.reporter ? ' · ' + r.reporter : ''} · <span class="${sev}">${r.severity} severity</span>
-          </div>
-          <div style="margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            ${progressBadge(prog)}
-            ${eta ? `<span class="eta-display">🕐 ETA: ${eta}</span>` : ''}
-          </div>
-        </div>
-        <span class="badge ${r.status === 'open' ? 'badge-issue' : 'badge-ok'}">${r.status}</span>
+    return `<div class="report-row" onclick="openDrawer(${idx})">
+      <span class="dot ${r.status === 'open' ? 'dot-issue' : 'dot-ok'}" style="width:9px;height:9px;flex-shrink:0"></span>
+      <div class="report-row-info">
+        <div class="report-row-name">${inst ? inst.name : 'Unknown instrument'}</div>
+        <div class="report-row-sub">${date}${loc ? ' &middot; ' + loc.name : ''} &middot; <span class="${sevClass}">${r.severity} severity</span></div>
       </div>
-      <div style="font-size:13px;color:#555;margin-top:8px;line-height:1.5">${r.description}</div>
-      ${r.image_url ? `<img class="report-img" src="${r.image_url}" alt="Report photo" onclick="openLightbox('${r.image_url}')">` : ''}
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        ${progressBadge(prog)}
+        <span class="report-chevron">&#8250;</span>
+      </div>
     </div>`;
   }).join('');
+}
+
+function openDrawer(idx) {
+  const list = getFilteredReports();
+  const r = list[idx];
+  if (!r) return;
+
+  const inst = allInstruments.find(i => i.id === r.instrument_id);
+  const loc = inst ? allLocations.find(l => l.id === inst.location_id) : null;
+  const sevClass = { high:'sev-high', medium:'sev-medium', low:'sev-low' }[r.severity] || '';
+  const date = new Date(r.created_at).toLocaleDateString(undefined, { month:'long', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  const prog = r.progress || 'new';
+  const eta = r.eta ? new Date(r.eta).toLocaleDateString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : null;
+
+  document.getElementById('drawer-title').textContent = inst ? inst.name : 'Unknown instrument';
+
+  let meta = '';
+  if (loc) meta += `<span class="loc-pill">${loc.name}</span>`;
+  meta += `<span>${date}</span>`;
+  if (r.reporter) meta += `<span>&middot; ${r.reporter}</span>`;
+  meta += `<span class="${sevClass}">&middot; ${r.severity} severity</span>`;
+  meta += progressBadge(prog);
+  if (eta) meta += `<span class="eta-display">&#128336; ETA: ${eta}</span>`;
+  meta += `<span class="badge ${r.status === 'open' ? 'badge-issue' : 'badge-ok'}">${r.status}</span>`;
+  document.getElementById('drawer-meta').innerHTML = meta;
+
+  document.getElementById('drawer-description').textContent = r.description || 'No description provided.';
+
+  const imgWrap = document.getElementById('drawer-img-wrap');
+  const imgEl = document.getElementById('drawer-img');
+  if (r.image_url) {
+    imgEl.src = r.image_url;
+    imgEl.onclick = () => openLightbox(r.image_url);
+    imgWrap.style.display = 'block';
+  } else {
+    imgWrap.style.display = 'none';
+  }
+
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('report-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('report-drawer').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 async function load() {
@@ -272,10 +352,10 @@ async function load() {
     const banner = document.getElementById('banner');
     if (issue > 0 || offline > 0) {
       banner.className = 'banner banner-issue';
-      banner.innerHTML = `<span class="banner-icon">⚠️</span> ${issue + offline} instrument${issue + offline !== 1 ? 's' : ''} currently need attention`;
+      banner.innerHTML = `<span class="banner-icon">&#9888;&#65039;</span> ${issue + offline} instrument${issue + offline !== 1 ? 's' : ''} currently need attention`;
     } else {
       banner.className = 'banner banner-ok';
-      banner.innerHTML = `<span class="banner-icon">✓</span> All instruments operational`;
+      banner.innerHTML = `<span class="banner-icon">&#10003;</span> All instruments operational`;
     }
 
     // Metrics
@@ -317,7 +397,6 @@ async function load() {
     }
     document.getElementById('loc-list').innerHTML = html;
 
-    // Reports
     renderReports();
 
     document.getElementById('loading-state').style.display = 'none';
