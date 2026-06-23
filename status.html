@@ -3,88 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Microscope Status — Harvard Center for Biological Imaging</title>
-<meta name="description" content="Live status of microscopes at Harvard Center for Biological Imaging (HCBI). Check availability before your session.">
+<title>Equipment Status — HCBI</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f7f7f7; color: #1a1a1a; min-height: 100vh; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: transparent;
+  color: #1a1a1a;
+}
 
-/* Header */
-header { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 0 1.5rem; }
-.header-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-mark { width: 32px; height: 32px; background: #1a1a1a; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 700; flex-shrink: 0; }
-.logo-text { font-size: 15px; font-weight: 600; line-height: 1.2; }
-.logo-sub { font-size: 11px; color: #888; font-weight: 400; }
-.header-right { display: flex; align-items: center; gap: 12px; }
-#refresh-info { font-size: 11px; color: #aaa; }
-.refresh-btn { font-size: 12px; padding: 5px 12px; border: 1px solid #e0e0e0; border-radius: 6px; background: #fff; cursor: pointer; color: #555; }
+/* Toolbar */
+.toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 1.25rem; }
+.toolbar-right { display: flex; align-items: center; gap: 10px; }
+#refresh-info { font-size: 12px; color: #999; }
+.refresh-btn { font-size: 12px; padding: 5px 12px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; color: #555; }
 .refresh-btn:hover { background: #f5f5f5; }
 
-/* Main */
-main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-
-/* Overall banner */
-.banner { border-radius: 12px; padding: 14px 18px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; }
-.banner-ok { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+/* Banner */
+.banner { border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; }
+.banner-ok  { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
 .banner-issue { background: #fdecea; color: #c62828; border: 1px solid #ffcdd2; }
-.banner-icon { font-size: 18px; }
 
 /* Metrics */
-.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 12px; margin-bottom: 1.75rem; }
-.metric { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem; text-align: center; }
-.metric-value { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.metric { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: .85rem; text-align: center; }
+.metric-value { font-size: 24px; font-weight: 700; margin-bottom: 3px; }
 .metric-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: .05em; }
 
 /* Legend */
-.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 1.25rem; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
 .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.dot-ok { background: #43a047; }
-.dot-issue { background: #e53935; }
+.dot-ok          { background: #43a047; }
+.dot-issue       { background: #e53935; }
 .dot-maintenance { background: #fb8c00; }
-.dot-offline { background: #9e9e9e; }
-
-/* Location blocks */
-.loc-block { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; margin-bottom: 14px; overflow: hidden; }
-.loc-header { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; background: #fafafa; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.loc-name { font-size: 14px; font-weight: 600; }
-.loc-sub { font-size: 12px; color: #888; margin-top: 2px; }
-.loc-stats { font-size: 12px; color: #888; white-space: nowrap; flex-shrink: 0; }
-.inst-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid #f5f5f5; gap: 10px; }
-.inst-row:last-child { border-bottom: none; }
-.inst-name { font-size: 13px; flex: 1; min-width: 0; }
-.badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
-.badge-ok { background: #e8f5e9; color: #2e7d32; }
-.badge-issue { background: #fdecea; color: #c62828; }
-.badge-maintenance { background: #fff8e1; color: #f57f17; }
-.badge-offline { background: #f5f5f5; color: #757575; }
-.badge-new { background: #e3f2fd; color: #1565c0; }
-.badge-internal { background: #fff3e0; color: #e65100; }
-.badge-company { background: #f3e5f5; color: #6a1b9a; }
-.badge-resolved-prog { background: #e8f5e9; color: #2e7d32; }
+.dot-offline     { background: #9e9e9e; }
 
 /* Section heading */
-.section-heading { font-size: 14px; font-weight: 600; color: #444; margin-bottom: 1rem; margin-top: 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.section-heading { font-size: 14px; font-weight: 600; color: #444; margin-bottom: .85rem; margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+/* Location blocks */
+.loc-block { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+.loc-header { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; background: #fafafa; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.loc-name { font-size: 14px; font-weight: 600; }
+.loc-sub  { font-size: 12px; color: #888; margin-top: 2px; }
+.loc-stats { font-size: 12px; color: #888; white-space: nowrap; flex-shrink: 0; }
+.inst-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; border-bottom: 1px solid #f5f5f5; gap: 10px; }
+.inst-row:last-child { border-bottom: none; }
+.inst-name { font-size: 13px; flex: 1; min-width: 0; }
+
+/* Badges */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+.badge-ok          { background: #e8f5e9; color: #2e7d32; }
+.badge-issue       { background: #fdecea; color: #c62828; }
+.badge-maintenance { background: #fff8e1; color: #f57f17; }
+.badge-offline     { background: #f5f5f5; color: #757575; }
+.badge-new         { background: #e3f2fd; color: #1565c0; }
+.badge-internal    { background: #fff3e0; color: #e65100; }
+.badge-company     { background: #f3e5f5; color: #6a1b9a; }
+.badge-resolved-prog { background: #e8f5e9; color: #2e7d32; }
 
 /* Report list */
-.report-list { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; }
-.report-row { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; transition: background .1s; user-select: none; }
+.report-list { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; overflow: hidden; }
+.report-row { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #f5f5f5; cursor: pointer; transition: background .1s; user-select: none; }
 .report-row:last-child { border-bottom: none; }
-.report-row:hover { background: #fafafa; }
+.report-row:hover  { background: #fafafa; }
 .report-row:active { background: #f0f0f0; }
 .report-row-info { flex: 1; min-width: 0; }
 .report-row-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.report-row-sub { font-size: 11px; color: #888; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.report-chevron { color: #ccc; font-size: 18px; line-height: 1; flex-shrink: 0; }
+.report-row-sub  { font-size: 11px; color: #888; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.report-chevron  { color: #ccc; font-size: 18px; line-height: 1; flex-shrink: 0; }
 .loc-pill { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 20px; background: #f0f0f0; color: #666; }
-.sev-high { color: #c62828; font-weight: 500; }
+.sev-high   { color: #c62828; font-weight: 500; }
 .sev-medium { color: #f57f17; font-weight: 500; }
-.sev-low { color: #888; }
+.sev-low    { color: #888; }
 .eta-display { font-size: 11px; color: #888; }
-
-/* Filter row */
-.filter-row select { font-size: 13px; padding: 5px 10px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fff; color: #555; outline: none; cursor: pointer; }
+.filter-row select { font-size: 13px; padding: 5px 10px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #555; outline: none; cursor: pointer; }
 
 /* Lightbox */
 .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 400; display: none; align-items: center; justify-content: center; cursor: pointer; }
@@ -94,88 +88,68 @@ main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 /* Drawer */
 .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .25s; }
 .drawer-overlay.open { opacity: 1; pointer-events: auto; }
-.drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-radius: 18px 18px 0 0; z-index: 201; max-height: 85vh; overflow-y: auto; padding: 0 0 env(safe-area-inset-bottom, 1rem); transform: translateY(100%); transition: transform .28s cubic-bezier(.32,.72,0,1); }
+.drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-radius: 18px 18px 0 0; z-index: 201; max-height: 85vh; overflow-y: auto; padding: 0 0 env(safe-area-inset-bottom,1rem); transform: translateY(100%); transition: transform .28s cubic-bezier(.32,.72,0,1); }
 .drawer.open { transform: translateY(0); }
 .drawer-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 12px auto 0; }
-.drawer-header { padding: 16px 1.25rem 14px; border-bottom: 1px solid #f0f0f0; }
-.drawer-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-.drawer-meta { font-size: 12px; color: #888; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; row-gap: 6px; }
-.drawer-body { padding: 1.1rem 1.25rem 1.5rem; }
+.drawer-header { padding: 16px 1.25rem 14px; border-bottom: 1px solid #f0f0f0; position: relative; }
+.drawer-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; padding-right: 36px; }
+.drawer-meta  { font-size: 12px; color: #888; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; row-gap: 6px; }
+.drawer-body  { padding: 1.1rem 1.25rem 1.5rem; }
 .drawer-section-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
 .drawer-description { font-size: 14px; color: #333; line-height: 1.65; margin-bottom: 1.5rem; white-space: pre-wrap; }
 .drawer-img { width: 100%; max-height: 320px; object-fit: cover; border-radius: 10px; cursor: zoom-in; }
-.drawer-close { position: absolute; top: 14px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #f0f0f0; border: none; font-size: 16px; line-height: 28px; text-align: center; cursor: pointer; color: #666; padding: 0; }
+.drawer-close { position: absolute; top: 14px; right: 14px; width: 28px; height: 28px; border-radius: 50%; background: #f0f0f0; border: none; font-size: 16px; line-height: 28px; text-align: center; cursor: pointer; color: #666; padding: 0; }
 .drawer-close:hover { background: #e5e5e5; }
 
 /* States */
-.loading { text-align: center; padding: 4rem; color: #888; font-size: 14px; }
-.error-box { background: #fdecea; color: #c62828; border-radius: 12px; padding: 1.25rem; font-size: 13px; line-height: 1.6; margin-bottom: 1rem; }
-.empty { text-align: center; padding: 2.5rem; color: #aaa; font-size: 14px; }
-.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #ddd; border-top-color: #555; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 8px; }
+.loading   { text-align: center; padding: 3rem; color: #888; font-size: 14px; }
+.error-box { background: #fdecea; color: #c62828; border-radius: 8px; padding: 1rem; font-size: 13px; line-height: 1.6; }
+.empty     { text-align: center; padding: 2rem; color: #aaa; font-size: 14px; }
+.spinner   { display: inline-block; width: 16px; height: 16px; border: 2px solid #ddd; border-top-color: #555; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 8px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* Footer */
-footer { text-align: center; padding: 2rem 1rem; font-size: 12px; color: #bbb; border-top: 1px solid #eee; margin-top: 2rem; }
-footer a { color: #aaa; }
-
-@media (max-width: 500px) {
-  .inst-name { font-size: 12px; }
-  .metric-value { font-size: 22px; }
-  .logo-text { font-size: 14px; }
-}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="logo">
-      <div class="logo-mark">H</div>
-      <div>
-        <div class="logo-text">Harvard Center for Biological Imaging</div>
-        <div class="logo-sub">Instrument Status</div>
-      </div>
-    </div>
-    <div class="header-right">
-      <span id="refresh-info">Loading…</span>
-      <button class="refresh-btn" onclick="load()">&#8635; Refresh</button>
-    </div>
-  </div>
-</header>
+<div id="loading-state" class="loading"><span class="spinner"></span> Fetching live status…</div>
 
-<main>
-  <div id="loading-state" class="loading"><span class="spinner"></span> Fetching live status…</div>
+<div id="content" style="display:none">
 
-  <div id="content" style="display:none">
-    <div id="banner" class="banner banner-ok"></div>
-
-    <div class="metric-grid" id="metrics"></div>
-
+  <div class="toolbar">
     <div class="legend">
       <div class="legend-item"><span class="dot dot-ok"></span> Operational</div>
       <div class="legend-item"><span class="dot dot-issue"></span> Issue reported</div>
       <div class="legend-item"><span class="dot dot-maintenance"></span> Maintenance</div>
       <div class="legend-item"><span class="dot dot-offline"></span> Offline</div>
     </div>
-
-    <div class="section-heading">Instruments by location</div>
-    <div id="loc-list"></div>
-
-    <div class="section-heading">
-      <span>Issue reports</span>
-      <select id="filter-status" onchange="renderReports()">
-        <option value="open">Open</option>
-        <option value="all">All</option>
-        <option value="resolved">Resolved</option>
-      </select>
+    <div class="toolbar-right">
+      <span id="refresh-info"></span>
+      <button class="refresh-btn" onclick="load()">&#8635; Refresh</button>
     </div>
-    <div id="report-list" class="report-list"></div>
   </div>
 
-  <div id="error-state" style="display:none">
-    <div class="error-box">&#9888;&#65039; Could not load instrument status. Please try refreshing.</div>
+  <div id="banner" class="banner banner-ok"></div>
+
+  <div class="metric-grid" id="metrics"></div>
+
+  <div class="section-heading">Instruments by location</div>
+  <div id="loc-list"></div>
+
+  <div class="section-heading">
+    <span>Issue reports</span>
+    <select id="filter-status" onchange="renderReports()">
+      <option value="open">Open</option>
+      <option value="all">All</option>
+      <option value="resolved">Resolved</option>
+    </select>
   </div>
-</main>
+  <div id="report-list" class="report-list"></div>
+
+</div>
+
+<div id="error-state" style="display:none">
+  <div class="error-box">&#9888; Could not load instrument status. Please try refreshing.</div>
+</div>
 
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
@@ -184,12 +158,12 @@ footer a { color: #aaa; }
 
 <!-- Report detail drawer -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
-<div class="drawer" id="report-drawer" style="position:relative">
+<div class="drawer" id="report-drawer">
   <div class="drawer-handle"></div>
-  <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
   <div class="drawer-header">
+    <button class="drawer-close" onclick="closeDrawer()">&#215;</button>
     <div class="drawer-title" id="drawer-title"></div>
-    <div class="drawer-meta" id="drawer-meta"></div>
+    <div class="drawer-meta"  id="drawer-meta"></div>
   </div>
   <div class="drawer-body">
     <div class="drawer-section-label">Description</div>
@@ -200,11 +174,6 @@ footer a { color: #aaa; }
     </div>
   </div>
 </div>
-
-<footer>
-  Live status &middot; Auto-refreshes every 5 minutes &middot;
-  <a href="https://hbrown227.github.io/lab-instruments">Full tracker</a>
-</footer>
 
 <script>
 const SUPABASE_URL = 'https://psxxeflslqyyloxaicvo.supabase.co';
@@ -221,17 +190,17 @@ async function sb(path) {
 }
 
 function statusBadge(s) {
-  const map = { ok:'badge-ok', issue:'badge-issue', maintenance:'badge-maintenance', offline:'badge-offline' };
+  const map    = { ok:'badge-ok', issue:'badge-issue', maintenance:'badge-maintenance', offline:'badge-offline' };
   const labels = { ok:'Operational', issue:'Issue reported', maintenance:'Maintenance', offline:'Offline' };
   return `<span class="badge ${map[s]||'badge-offline'}"><span class="dot dot-${s||'offline'}" style="width:6px;height:6px;margin-right:2px"></span>${labels[s]||s}</span>`;
 }
 
 function progressBadge(p) {
   const map = {
-    new: ['New', 'badge-new'],
+    new:                  ['New',                    'badge-new'],
     in_progress_internal: ['In progress \u2013 Internal', 'badge-internal'],
-    in_progress_company: ['In progress \u2013 Company', 'badge-company'],
-    resolved_progress: ['Resolved', 'badge-resolved-prog']
+    in_progress_company:  ['In progress \u2013 Company',  'badge-company'],
+    resolved_progress:    ['Resolved',               'badge-resolved-prog']
   };
   const [label, cls] = map[p] || ['New', 'badge-new'];
   return `<span class="badge ${cls}">${label}</span>`;
@@ -249,19 +218,17 @@ function getFilteredReports() {
 
 function renderReports() {
   const list = getFilteredReports();
-  const el = document.getElementById('report-list');
+  const el   = document.getElementById('report-list');
   if (!list.length) {
     el.innerHTML = '<div class="empty">No reports found</div>';
     return;
   }
-
   el.innerHTML = list.map((r, idx) => {
-    const inst = allInstruments.find(i => i.id === r.instrument_id);
-    const loc = inst ? allLocations.find(l => l.id === inst.location_id) : null;
+    const inst     = allInstruments.find(i => i.id === r.instrument_id);
+    const loc      = inst ? allLocations.find(l => l.id === inst.location_id) : null;
     const sevClass = { high:'sev-high', medium:'sev-medium', low:'sev-low' }[r.severity] || '';
-    const date = new Date(r.created_at).toLocaleDateString(undefined, { month:'short', day:'numeric' });
-    const prog = r.progress || 'new';
-
+    const date     = new Date(r.created_at).toLocaleDateString(undefined, { month:'short', day:'numeric' });
+    const prog     = r.progress || 'new';
     return `<div class="report-row" onclick="openDrawer(${idx})">
       <span class="dot ${r.status === 'open' ? 'dot-issue' : 'dot-ok'}" style="width:9px;height:9px;flex-shrink:0"></span>
       <div class="report-row-info">
@@ -274,38 +241,37 @@ function renderReports() {
       </div>
     </div>`;
   }).join('');
+  notifyHeight();
 }
 
 function openDrawer(idx) {
   const list = getFilteredReports();
-  const r = list[idx];
+  const r    = list[idx];
   if (!r) return;
-
-  const inst = allInstruments.find(i => i.id === r.instrument_id);
-  const loc = inst ? allLocations.find(l => l.id === inst.location_id) : null;
+  const inst     = allInstruments.find(i => i.id === r.instrument_id);
+  const loc      = inst ? allLocations.find(l => l.id === inst.location_id) : null;
   const sevClass = { high:'sev-high', medium:'sev-medium', low:'sev-low' }[r.severity] || '';
-  const date = new Date(r.created_at).toLocaleDateString(undefined, { month:'long', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
-  const prog = r.progress || 'new';
-  const eta = r.eta ? new Date(r.eta).toLocaleDateString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : null;
+  const date     = new Date(r.created_at).toLocaleDateString(undefined, { month:'long', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  const prog     = r.progress || 'new';
+  const eta      = r.eta ? new Date(r.eta).toLocaleDateString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : null;
 
   document.getElementById('drawer-title').textContent = inst ? inst.name : 'Unknown instrument';
 
   let meta = '';
-  if (loc) meta += `<span class="loc-pill">${loc.name}</span>`;
+  if (loc)        meta += `<span class="loc-pill">${loc.name}</span>`;
   meta += `<span>${date}</span>`;
   if (r.reporter) meta += `<span>&middot; ${r.reporter}</span>`;
   meta += `<span class="${sevClass}">&middot; ${r.severity} severity</span>`;
   meta += progressBadge(prog);
-  if (eta) meta += `<span class="eta-display">&#128336; ETA: ${eta}</span>`;
+  if (eta)        meta += `<span class="eta-display">&#128336; ETA: ${eta}</span>`;
   meta += `<span class="badge ${r.status === 'open' ? 'badge-issue' : 'badge-ok'}">${r.status}</span>`;
   document.getElementById('drawer-meta').innerHTML = meta;
-
   document.getElementById('drawer-description').textContent = r.description || 'No description provided.';
 
   const imgWrap = document.getElementById('drawer-img-wrap');
-  const imgEl = document.getElementById('drawer-img');
+  const imgEl   = document.getElementById('drawer-img');
   if (r.image_url) {
-    imgEl.src = r.image_url;
+    imgEl.src     = r.image_url;
     imgEl.onclick = () => openLightbox(r.image_url);
     imgWrap.style.display = 'block';
   } else {
@@ -323,6 +289,13 @@ function closeDrawer() {
   document.body.style.overflow = '';
 }
 
+// Tell the parent iframe our full height so Drupal can size us correctly
+function notifyHeight() {
+  const h = document.body.scrollHeight;
+  window.parent.postMessage({ iframeHeight: h }, '*');
+}
+new ResizeObserver(notifyHeight).observe(document.body);
+
 async function load() {
   try {
     const [locs, insts, reps] = await Promise.all([
@@ -330,10 +303,9 @@ async function load() {
       sb('instruments?select=*&order=sort_order'),
       sb('reports?select=*&order=created_at.desc')
     ]);
-
-    allLocations = locs;
+    allLocations   = locs;
     allInstruments = insts;
-    allReports = reps;
+    allReports     = reps;
 
     const openCounts = {};
     reps.filter(r => r.status === 'open').forEach(r => {
@@ -341,21 +313,21 @@ async function load() {
     });
 
     const locations = locs.map(l => ({ ...l, instruments: insts.filter(i => i.location_id === l.id) }));
-
-    const total = insts.length;
-    const ok = insts.filter(i => (i.status || 'ok') === 'ok').length;
-    const issue = insts.filter(i => i.status === 'issue').length;
-    const offline = insts.filter(i => i.status === 'offline').length;
-    const openR = reps.filter(r => r.status === 'open').length;
+    const total  = insts.length;
+    const ok     = insts.filter(i => (i.status || 'ok') === 'ok').length;
+    const issue  = insts.filter(i => i.status === 'issue').length;
+    const offline= insts.filter(i => i.status === 'offline').length;
+    const maint  = insts.filter(i => i.status === 'maintenance').length;
+    const openR  = reps.filter(r => r.status === 'open').length;
 
     // Banner
     const banner = document.getElementById('banner');
     if (issue > 0 || offline > 0) {
       banner.className = 'banner banner-issue';
-      banner.innerHTML = `<span class="banner-icon">&#9888;&#65039;</span> ${issue + offline} instrument${issue + offline !== 1 ? 's' : ''} currently need attention`;
+      banner.innerHTML = `<span>&#9888;&#65039;</span> ${issue + offline} instrument${issue + offline !== 1 ? 's' : ''} currently need attention`;
     } else {
       banner.className = 'banner banner-ok';
-      banner.innerHTML = `<span class="banner-icon">&#10003;</span> All instruments operational`;
+      banner.innerHTML = `<span>&#10003;</span> All instruments operational`;
     }
 
     // Metrics
@@ -363,11 +335,11 @@ async function load() {
       <div class="metric"><div class="metric-value">${total}</div><div class="metric-label">Total</div></div>
       <div class="metric"><div class="metric-value" style="color:#2e7d32">${ok}</div><div class="metric-label">Operational</div></div>
       <div class="metric"><div class="metric-value" style="color:#c62828">${issue}</div><div class="metric-label">Issues</div></div>
-      <div class="metric"><div class="metric-value" style="color:#f57f17">${insts.filter(i=>i.status==='maintenance').length}</div><div class="metric-label">Maintenance</div></div>
+      <div class="metric"><div class="metric-value" style="color:#f57f17">${maint}</div><div class="metric-label">Maintenance</div></div>
       <div class="metric"><div class="metric-value">${openR}</div><div class="metric-label">Open reports</div></div>
     `;
 
-    // Locations
+    // Instruments
     let html = '';
     for (const loc of locations) {
       const locOk = loc.instruments.filter(i => (i.status || 'ok') === 'ok').length;
@@ -380,7 +352,7 @@ async function load() {
           <div class="loc-stats">${locOk}/${loc.instruments.length} operational</div>
         </div>`;
       for (const inst of loc.instruments) {
-        const s = inst.status || 'ok';
+        const s  = inst.status || 'ok';
         const nr = openCounts[inst.id] || 0;
         html += `<div class="inst-row">
           <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
@@ -400,15 +372,15 @@ async function load() {
     renderReports();
 
     document.getElementById('loading-state').style.display = 'none';
-    document.getElementById('error-state').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-    document.getElementById('refresh-info').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    document.getElementById('error-state').style.display   = 'none';
+    document.getElementById('content').style.display       = 'block';
+    document.getElementById('refresh-info').textContent    = 'Updated ' + new Date().toLocaleTimeString();
+    notifyHeight();
 
   } catch(e) {
     document.getElementById('loading-state').style.display = 'none';
-    document.getElementById('content').style.display = 'none';
-    document.getElementById('error-state').style.display = 'block';
-    document.getElementById('refresh-info').textContent = 'Failed to load';
+    document.getElementById('content').style.display       = 'none';
+    document.getElementById('error-state').style.display   = 'block';
     console.error(e);
   }
 }
@@ -416,6 +388,5 @@ async function load() {
 load();
 setInterval(load, 5 * 60 * 1000);
 </script>
-
 </body>
 </html>
